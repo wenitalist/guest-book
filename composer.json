@@ -1,0 +1,17 @@
+{
+    "name": "wenitalist/guest-book",
+    "description": "practice",
+    "authors": [
+        {
+            "name": "wenitalist"
+        }
+    ],
+    "require": {
+        "symfony/var-dumper": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    }
+}

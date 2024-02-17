@@ -1,5 +1,6 @@
 html {
     font-size: 20px;
+    background-color: rgb(190, 190, 190);
 }
 
 a {
@@ -48,4 +49,10 @@ nav {
 
 button {
     width: 10%;
+}
+
+.error404 {
+    font-size: 70px;
+    display: flex;
+    justify-content: center;
 }

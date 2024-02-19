@@ -1,7 +1,7 @@
 <div class='new-comment'>
     <?php 
         if ($_SESSION['login'] === NULL) {
-            echo "<p>Оставить комментарий</p>
+            echo "<h2>Оставить комментарий</h2>
             <form action='/publish' class='form'>
                 <label>
                     Имя:

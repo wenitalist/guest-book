@@ -1,7 +1,7 @@
 <div class="authorization">
     <?php 
         if ($_SESSION['login'] === NULL) {
-            echo "<p>Авторизация</p>
+            echo "<h2>Авторизация</h2>
             <form action='/auth' class='form'>
                 <label>
                     Почта:

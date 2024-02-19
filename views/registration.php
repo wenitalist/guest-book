@@ -1,7 +1,7 @@
 <div class="registration">
     <?php 
         if ($_SESSION['login'] === NULL) {
-            echo "<p>Регистрация</p>
+            echo "<h2>Регистрация</h2>
             <form action='/regis' class='form'>
                 <label>
                     Имя:

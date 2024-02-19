@@ -1,12 +1,27 @@
-<form action="/add-comment" class="form">
+<div class='new-comment'>
     <?php 
         if ($_SESSION['login'] === NULL) {
-            echo "<label>Имя:<input type='text' maxlength='50'></label>";
+            echo "<p>Оставить комментарий</p>
+            <form action='/publish' class='form'>
+                <label>
+                    Имя:
+                    <input required class='comment-input' type='text' maxlength='40'>
+                </label>
+                <label>
+                    Комментарий:
+                    <textarea class='comment-input-text' maxlength='150'></textarea>
+                </label>
+                <button class='comment-button' type='submit'>Опубликовать</button>
+            </form>";
+        } else {
+            echo "<p>Оставить комментарий</p>
+            <form action='/publish' class='form'>
+                <label>
+                    Комментарий:
+                    <textarea class='comment-input-text' maxlength='150'></textarea>
+                </label>
+                <button class='comment-button' type='submit'>Опубликовать</button>
+            </form>";
         }
     ?>
-    <label>
-        Комментарий:
-        <input type="text" maxlength="150">
-    </label>
-    <button type='submit'>Отправить</button>
-</form>
+</div>

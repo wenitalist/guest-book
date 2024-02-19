@@ -32,9 +32,11 @@ const MASS_URL = [
                 }
                 elseif ($url === MASS_URL[1]) { // Авторизация
                     require_once("../views/menu.php");
+                    require_once("../views/authorization.php");
                 }
                 elseif ($url === MASS_URL[2]) { // Регистрация
                     require_once("../views/menu.php");
+                    require_once("../views/registration.php");
                 }
                 else { // Страница не найдена
                     require_once("../views/menu.php");

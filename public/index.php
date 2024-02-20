@@ -1,14 +1,11 @@
 <?php
+// ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 session_start();
-
-const MASS_URL = [
-    "/",
-    "/authorization",
-    "/registration"
-];
 
 ?>
 
@@ -22,25 +19,13 @@ const MASS_URL = [
     <main>
         <div class='main-block'>
             <?php 
-                $url = $_SERVER['REQUEST_URI'];
-                $url = explode('?', $url);
-                $url = $url[0];
+                require_once("../views/menu.php");
 
-                if ($url === MASS_URL[0]) { // Главная
-                    require_once("../views/menu.php");
-                    require_once("../views/new-comment.php");
-                }
-                elseif ($url === MASS_URL[1]) { // Авторизация
-                    require_once("../views/menu.php");
-                    require_once("../views/authorization.php");
-                }
-                elseif ($url === MASS_URL[2]) { // Регистрация
-                    require_once("../views/menu.php");
-                    require_once("../views/registration.php");
-                }
-                else { // Страница не найдена
-                    require_once("../views/menu.php");
-                    require_once("../views/error404.php");
+                $classUrl = new \App\Url;
+                $page = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
+                
+                if ($page !== NULL) {
+                    require_once($page);
                 }
             ?>
         </div>

@@ -1,24 +1,60 @@
 <?php
 
+namespace App;
+
 class Database {
 
-    private $connection;
-    private static $instance;
+    private $connect;
 
-    private function __construct() {
-        $this->connection = new PDO('mysql:host=192.168.0.109;dbname=guest_book', 'wenitalist', '904067');
-        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public function __construct()
+    {
+        $database = Connect::getInstance();
+        $this->connect = $database->getConnection();
     }
 
-    public static function getInstance() { // С помощью этого метода мы получаем экземпляр класса Database
+    public function newUser () { // Для регистрации
+        $name = $_POST["name"];
+        $mail = $_POST["mail"];
+        $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-        if (!self::$instance) { // Если экземпляр класса не существует
-            self::$instance = new self();  // он создается в переменной $instance
+        $query = "INSERT INTO users (mail, password, name, type) VALUES (?, ?, ?, ?)";
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute([$mail, $passwordHash, $name, 'default']);
+
+        header('Location: /');
+        exit();
+    }
+
+    public function newComment() { // Для сохранения нового комментария
+
+        header('Location: /');
+        exit();
+    }
+
+    public function getUser() { // Для авторизации
+        $mail = $_POST["mail"];
+        $password = $_POST["password"];
+
+        $query = "SELECT * FROM users WHERE mail = ?";
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute([$mail]);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        if (password_verify($password, $results[0]['password'])) {
+            $_SESSION['login'] = 'yes';
+            $_SESSION['name'] = $results[0]['name'];
+            $_SESSION['mail'] = $mail;
+
+            header('Location: /');
+            exit();
+        } else {
+            // Пароль неверный
         }
-        return self::$instance; // Возвращает экземляр класса
     }
 
-    public function getConnection() {
-        return $this->connection;
+    public function getComments() { // Получить все комментарии
+
+        header('Location: /');
+        exit();
     }
 }

@@ -2,18 +2,18 @@
     <?php 
         if ($_SESSION['login'] === NULL) {
             echo "<h2>Регистрация</h2>
-            <form action='/regis' class='form'>
+            <form action='/regis' class='form' method='POST'>
                 <label>
                     Имя:
-                    <input required class='authentication' type='text' maxlength='50'>
+                    <input required class='authentication' type='text' maxlength='50' name='name'>
                 </label>
                 <label>
                     Почта:
-                    <input required class='authentication' type='text' maxlength='40'>
+                    <input required class='authentication' type='text' maxlength='40' name='mail'>
                 </label>
                 <label>
                     Пароль:
-                    <input required class='authentication' type='text' maxlength='20'>
+                    <input required class='authentication' type='text' maxlength='20' name='password'>
                 </label>
                 <button class='auth-button' type='submit'>Зарегистрироваться</button>
             </form>";

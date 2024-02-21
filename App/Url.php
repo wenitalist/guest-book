@@ -9,10 +9,11 @@ class Url {
         '/registration',
         '/auth',
         '/regis',
-        '/publish'
+        '/publish',
+        '/logout'
     ];
 
-    public function checkUrl (string $request): ?string {
+    public function checkUrl (string $request): string {
         $url = explode('?', $request);
         $url = $url[0];
 
@@ -28,20 +29,18 @@ class Url {
         elseif ($url === self::MASS_URL[3]) { // Авторизация
             $database = new Database();
             $database->getUser();
-
-            return NULL;
         }
         elseif ($url === self::MASS_URL[4]) { // Регистрация
             $database = new Database();
             $database->newUser();
-
-            return NULL;
         }
         elseif ($url === self::MASS_URL[5]) { // Новый комментарий
             $database = new Database();
             $database->newComment();
-
-            return NULL;
+        }
+        elseif ($url === self::MASS_URL[6]) { // Выход с аккаунта
+            $database = new Database();
+            $database->logout();
         }
         else { // Страница не найдена
             return "../views/error404.php";

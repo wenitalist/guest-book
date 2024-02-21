@@ -26,6 +26,18 @@ class Database {
     }
 
     public function newComment() { // Для сохранения нового комментария
+        
+        if (isset($_POST['name'])) {
+            $name = $_POST['name'];
+        } else {
+            $name = $_SESSION['name'];
+        }
+
+        $content = $_POST['comment'];
+
+        $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
 
         header('Location: /');
         exit();
@@ -43,7 +55,8 @@ class Database {
         if (password_verify($password, $results[0]['password'])) {
             $_SESSION['login'] = 'yes';
             $_SESSION['name'] = $results[0]['name'];
-            $_SESSION['mail'] = $mail;
+            $_SESSION['user_id'] = $results[0]['id'];
+            //$_SESSION['mail'] = $mail;
 
             header('Location: /');
             exit();
@@ -52,7 +65,9 @@ class Database {
         }
     }
 
-    public function getComments() { // Получить все комментарии
+    public function logout() { // Выход с аккаунта
+        session_unset();
+        session_destroy();
 
         header('Location: /');
         exit();

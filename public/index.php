@@ -7,6 +7,10 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 session_start();
 
+if (!isset($_SESSION['login'])) {
+    $_SESSION['login'] = 'no';
+}
+
 ?>
 
 <DOCTYPE html>
@@ -23,10 +27,7 @@ session_start();
 
                 $classUrl = new \App\Url;
                 $page = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
-                
-                if ($page !== NULL) {
-                    require_once($page);
-                }
+                require_once($page);
             ?>
         </div>
     </main>

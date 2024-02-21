@@ -72,4 +72,12 @@ class Database {
         header('Location: /');
         exit();
     }
+
+    public function getComments() { // Получить все комментарии
+        $query = "SELECT comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
+                  FROM comments LEFT JOIN users ON comments.user_id = users.id ORDER BY date_time DESC";
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

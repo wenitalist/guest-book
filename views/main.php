@@ -8,8 +8,28 @@
         ?>
         <label>
             Комментарий:
-            <textarea class='comment-input-text' maxlength='150' name='comment'></textarea>
+            <textarea class='comment-input-text' required maxlength='255' name='comment'></textarea>
         </label>
         <button class='comment-button' type='submit'>Опубликовать</button>
     </form>
+</div>
+<div class='comments-block'>
+    <?php 
+    $database = new App\Database;
+    $results = $database->getComments();
+
+    foreach ($results as $row) {
+        if ($row['name_in_users'] == NULL) {
+            $name = $row['name_in_comments'];
+        } else {
+            $name = $row['name_in_users'];
+        }
+
+        echo "<div class='comment-block'>
+            <p class='content'>{$row['content']}</p>
+            <p class='name'>Имя: {$name}</p>
+            <p class='date'>Дата: {$row['date_time']}</p>
+        </div>";
+    }
+    ?>
 </div>

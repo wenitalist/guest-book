@@ -78,3 +78,34 @@ nav {
     flex-direction: column;
     align-items: center;
 }
+
+.comments-block {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid black;
+}
+
+.comment-block {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(191, 237, 248);
+    margin: 3%;
+    padding: 1%;
+}
+
+.content {
+    font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.name {
+    margin-left: auto;
+    margin-bottom: 0px;
+}
+
+.date {
+    margin-left: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

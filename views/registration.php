@@ -1,6 +1,6 @@
 <div class="registration">
     <?php 
-        if ($_SESSION['login'] === NULL) {
+        if ($_SESSION['login'] === 'no') {
             echo "<h2>Регистрация</h2>
             <form action='/regis' class='form' method='POST'>
                 <label>
@@ -13,7 +13,7 @@
                 </label>
                 <label>
                     Пароль:
-                    <input required class='authentication' type='text' maxlength='20' name='password'>
+                    <input required class='authentication' type='password' maxlength='20' name='password'>
                 </label>
                 <button class='auth-button' type='submit'>Зарегистрироваться</button>
             </form>";

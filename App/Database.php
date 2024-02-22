@@ -17,22 +17,29 @@ class Database {
         $mail = $_POST["mail"];
         $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-        $query = "INSERT INTO users (mail, password, name, type) VALUES (?, ?, ?, ?)";
-        $stmt = $this->connect->prepare($query);
-        $stmt->execute([$mail, $passwordHash, $name, 'default']);
+        if (!$this->checkMail($mail)) {
+            $query = "INSERT INTO users (mail, password, name, type) VALUES (?, ?, ?, ?)";
+            $stmt = $this->connect->prepare($query);
+            $stmt->execute([$mail, $passwordHash, $name, 'default']);
+    
+            header('Location: /');
+            exit();
+        } else {
+            // Если пользователь с таким мейлом уже существует
+        }
+    }
 
-        header('Location: /');
-        exit();
+    public function checkMail(string $mail): bool { // Проверка свободен ли адрес эл. почты
+        $query = "SELECT * FROM users WHERE mail = ?";
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute([$mail]);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $result ? true : false;
     }
 
     public function newComment() { // Для сохранения нового комментария
-        
-        if (isset($_POST['name'])) {
-            $name = $_POST['name'];
-        } else {
-            $name = $_SESSION['name'];
-        }
-
+        $name = isset($_POST['name']) ? $_POST['name'] : $_SESSION['name'];
         $content = $_POST['comment'];
 
         $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
@@ -50,12 +57,13 @@ class Database {
         $query = "SELECT * FROM users WHERE mail = ?";
         $stmt = $this->connect->prepare($query);
         $stmt->execute([$mail]);
-        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
         
-        if (password_verify($password, $results[0]['password'])) {
+        if (password_verify($password, $results['password'])) {
             $_SESSION['login'] = 'yes';
-            $_SESSION['name'] = $results[0]['name'];
-            $_SESSION['user_id'] = $results[0]['id'];
+            $_SESSION['name'] = $results['name'];
+            $_SESSION['user_id'] = $results['id'];
+            $_SESSION['permission'] = $results['type'];
             //$_SESSION['mail'] = $mail;
 
             header('Location: /');

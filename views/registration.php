@@ -9,7 +9,7 @@
                 </label>
                 <label>
                     Почта:
-                    <input required class='authentication' type='text' maxlength='40' name='mail'>
+                    <input required class='authentication' type='email' maxlength='40' name='mail'>
                 </label>
                 <label>
                     Пароль:

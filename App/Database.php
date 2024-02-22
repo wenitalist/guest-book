@@ -22,7 +22,7 @@ class Database {
             $stmt = $this->connect->prepare($query);
             $stmt->execute([$mail, $passwordHash, $name, 'default']);
     
-            header('Location: /');
+            header('Location: /authorization');
             exit();
         } else {
             // Если пользователь с таким мейлом уже существует

@@ -19,6 +19,8 @@ if (!isset($_SESSION['login'])) {
         <meta charset="UTF-8">
         <title>Главная страница</title>
         <link href="style.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../js/script.js"></script>
     </header>
     <main>
         <div class='main-block'>

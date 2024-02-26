@@ -64,6 +64,11 @@ nav {
     width: 100%;
 }
 
+#error-message {
+    display: none;
+    color: red;
+}
+
 .comment-input-text {
     font-size: 20px;
     width: 100%;

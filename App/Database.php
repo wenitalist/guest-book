@@ -53,23 +53,25 @@ class Database {
     public function getUser() { // Для авторизации
         $mail = $_POST["mail"];
         $password = $_POST["password"];
-
-        $query = "SELECT * FROM users WHERE mail = ?";
-        $stmt = $this->connect->prepare($query);
-        $stmt->execute([$mail]);
-        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
-        
-        if (password_verify($password, $results['password'])) {
-            $_SESSION['login'] = 'yes';
-            $_SESSION['name'] = $results['name'];
-            $_SESSION['user_id'] = $results['id'];
-            $_SESSION['permission'] = $results['type'];
-            //$_SESSION['mail'] = $mail;
-
-            header('Location: /');
-            exit();
+        if ($this->checkMail($mail)) {
+            $query = "SELECT * FROM users WHERE mail = ?";
+            $stmt = $this->connect->prepare($query);
+            $stmt->execute([$mail]);
+            $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
+            
+            if (password_verify($password, $results['password'])) {
+                $_SESSION['login'] = 'yes';
+                $_SESSION['name'] = $results['name'];
+                $_SESSION['user_id'] = $results['id'];
+                $_SESSION['permission'] = $results['type'];
+                //$_SESSION['mail'] = $mail;
+                header('Location: /');
+                exit();
+            } else {
+            // Неправильный лог пасс
+            }
         } else {
-            // Пароль неверный
+            // Неправильный лог пасс
         }
     }
 

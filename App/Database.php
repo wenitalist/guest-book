@@ -74,12 +74,14 @@ class Database {
             } else {
                 return json_encode([
                     'success' => false,
+                    'action' => 'authorization',
                     'message' => 'Неправильная почта или пароль'
                 ]);
             }
         } else {
             return json_encode([
                 'success' => false,
+                'action' => 'authorization',
                 'message' => 'Неправильная почта или пароль'
             ]);
         }

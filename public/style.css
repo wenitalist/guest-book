@@ -65,8 +65,9 @@ nav {
 }
 
 #error-message {
-    display: none;
-    color: red;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .comment-input-text {

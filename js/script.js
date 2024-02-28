@@ -1,26 +1,26 @@
-$(document).ready(function(){
-    $('#auth-form').submit(function(e){
-        e.preventDefault();
-        
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(response) {
-                alert(1);
-                if (response.success && response.action == 'authorization') {
-                    window.location.href = '/';
-                } else if (response.success && response.action == 'registration') {
-                    window.location.href = '/authorization';
-                } else {
-                    window.location.href = '/authorization';
-                    $('#error-message').text(response.message).show();
-                }
-            },
-            error: function() {
-                alert(1);
-                $('#error-message').text('Ошибка при отправке запроса').show();
+document.addEventListener('DOMContentLoaded', function() { 
+    const form = document.getElementById('auth-form');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        let errorMessage = document.getElementById('error-message');
+
+        try {
+            const response = await fetch('http://wenitalist.local:80/auth', {
+                method: 'POST',
+                body: new FormData(this)
+            });
+            const data = await response.json();
+            
+            if (data['success'] === true && data['action'] === 'authorization') {
+                window.location.href = "/";
+            } else if (data['success'] === false && data['action'] === 'authorization') {
+                errorMessage.innerHTML = 'Неправильный логин или пароль';
+                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
             }
-        });
+        } catch (error) {
+            errorMessage.innerHTML = 'Ошибка на сервере';
+            errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+        }
     });
 });

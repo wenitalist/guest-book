@@ -11,6 +11,10 @@
                     Пароль:
                     <input required class='authentication' type='password' maxlength='20' name='password'>
                 </label>
+                <label style='display:none'> <!-- Защита от ботов -->
+                    Фамилия:
+                    <input type='text' name='secondName' tabindex='-1'>
+                </label>
                 <button class='auth-button' type='submit'>Авторизироваться</button>
                 <p id='error-message'></p>
             </form>";

@@ -10,6 +10,10 @@
             Комментарий:
             <textarea class='comment-input-text' required maxlength='255' name='comment'></textarea>
         </label>
+        <label style='display:none'> <!-- Защита от ботов -->
+            Фамилия:
+            <input type='text' name='secondName' tabindex='-1'>
+        </label>
         <button class='comment-button' type='submit'>Опубликовать</button>
     </form>
 </div>

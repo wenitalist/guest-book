@@ -12,17 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: new FormData(this)
             });
             const data = await response.json();
-            
-            if (data['success'] === true && data['action'] === 'authorization') {
-                window.location.href = "/";
-            } else if (data['success'] === false && data['action'] === 'authorization') {
+
+            if ((data['success'] === false && data['action'] === 'authorization') || (data['success'] === false && data['action'] === 'registration')) {
                 errorMessage.innerHTML = data['message'];
                 errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
-            } else if (data['success'] === true && data['action'] === 'registration') {
-                window.location.href = "/authorization";
-            } else if (data['success'] === false && data['action'] === 'registration') {
-                errorMessage.innerHTML = data['message'];
-                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+            } else {
+                window.location.href = data['redirect'];
             }
         } catch (error) {
             errorMessage.innerHTML = 'Ошибка на сервере';

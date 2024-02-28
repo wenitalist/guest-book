@@ -24,7 +24,8 @@ class Database {
     
             return json_encode([
                 'success' => true,
-                'action' => 'registration'
+                'action' => 'registration',
+                'redirect' => '/authorization'
             ]);
         } else {
             return json_encode([
@@ -75,7 +76,8 @@ class Database {
     
                 return json_encode([
                     'success' => true,
-                    'action' => 'authorization'
+                    'action' => 'authorization',
+                    'redirect' => '/'
                 ]);
             } else {
                 return json_encode([

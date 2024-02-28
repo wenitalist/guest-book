@@ -53,11 +53,11 @@ class Url {
 
     public function setTitle(string $request) {
         switch ($request) {
-            case '/':
+            case self::MASS_URL[0]:
                 return '<title>Главная страница</title>';
-            case '/authorization':
+            case self::MASS_URL[1]:
                 return '<title>Авторизация</title>';
-            case '/registration':
+            case self::MASS_URL[2]:
                 return '<title>Регистрация</title>';
             default:
                 return '<title>Страница не найдена</title>';

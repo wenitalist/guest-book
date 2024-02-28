@@ -19,8 +19,8 @@ $response = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
 <html lang="ru">
     <header>
         <meta charset="UTF-8">
-        <title>Главная страница</title>
         <link href="style.css" rel="stylesheet">
+        <?php echo $classUrl->setTitle($_SERVER['REQUEST_URI']) ?>
         <script src="../js/script.js"></script>
     </header>
     <main>

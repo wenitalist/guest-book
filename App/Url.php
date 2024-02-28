@@ -50,4 +50,17 @@ class Url {
             return "../views/error404.php";
         }
     }
+
+    public function setTitle(string $request) {
+        switch ($request) {
+            case '/':
+                return '<title>Главная страница</title>';
+            case '/authorization':
+                return '<title>Авторизация</title>';
+            case '/registration':
+                return '<title>Регистрация</title>';
+            default:
+                return '<title>Страница не найдена</title>';
+        }
+    }
 }

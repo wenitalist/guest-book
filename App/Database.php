@@ -13,26 +13,31 @@ class Database {
     }
 
     public function newUser () { // Для регистрации
-        $name = $_POST["name"];
-        $mail = $_POST["mail"];
-        $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
+        if (!$_POST['secondName']) {
+            $name = $_POST["name"];
+            $mail = $_POST["mail"];
+            $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-        if (!$this->checkMail($mail)) {
-            $query = "INSERT INTO users (mail, password, name, type) VALUES (?, ?, ?, ?)";
-            $stmt = $this->connect->prepare($query);
-            $stmt->execute([$mail, $passwordHash, $name, 'default']);
-    
-            return json_encode([
-                'success' => true,
-                'action' => 'registration',
-                'redirect' => '/authorization'
-            ]);
+            if (!$this->checkMail($mail)) {
+                $query = "INSERT INTO users (mail, password, name, type) VALUES (?, ?, ?, ?)";
+                $stmt = $this->connect->prepare($query);
+                $stmt->execute([$mail, $passwordHash, $name, 'default']);
+            
+                return json_encode([
+                    'success' => true,
+                    'action' => 'registration',
+                    'redirect' => '/authorization'
+                ]);
+            } else {
+                return json_encode([
+                    'success' => false,
+                    'action' => 'registration',
+                    'message' => 'Почта уже зарегистрирована'
+                ]);
+            }
         } else {
-            return json_encode([
-                'success' => false,
-                'action' => 'registration',
-                'message' => 'Почта уже зарегистрирована'
-            ]);
+            header('Location: /');
+            exit();
         }
     }
 
@@ -46,39 +51,52 @@ class Database {
     }
 
     public function newComment() { // Для сохранения нового комментария
-        $name = isset($_POST['name']) ? $_POST['name'] : $_SESSION['name'];
-        $content = $_POST['comment'];
+        if (!$_POST['secondName']) {
+            $name = isset($_POST['name']) ? $_POST['name'] : $_SESSION['name'];
+            $content = $_POST['comment'];
 
-        $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
-        $stmt = $this->connect->prepare($query);
-        $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
+            $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
+            $stmt = $this->connect->prepare($query);
+            $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
 
-        header('Location: /');
-        exit();
+            header('Location: /');
+            exit();
+        } else {
+            header('Location: /');
+            exit();
+        }
     }
 
     public function getUser() { // Для авторизации
-        $mail = $_POST["mail"];
-        $password = $_POST["password"];
+        if (!$_POST['secondName']) {
+            $mail = $_POST["mail"];
+            $password = $_POST["password"];
 
-        if ($this->checkMail($mail)) {
-            $query = "SELECT * FROM users WHERE mail = ?";
-            $stmt = $this->connect->prepare($query);
-            $stmt->execute([$mail]);
-            $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
+            if ($this->checkMail($mail)) {
+                $query = "SELECT * FROM users WHERE mail = ?";
+                $stmt = $this->connect->prepare($query);
+                $stmt->execute([$mail]);
+                $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
 
-            if (password_verify($password, $results['password'])) {
-                $_SESSION['login'] = 'yes';
-                $_SESSION['name'] = $results['name'];
-                $_SESSION['user_id'] = $results['id'];
-                $_SESSION['permission'] = $results['type'];
-                //$_SESSION['mail'] = $mail;
-    
-                return json_encode([
-                    'success' => true,
-                    'action' => 'authorization',
-                    'redirect' => '/'
-                ]);
+                if (password_verify($password, $results['password'])) {
+                    $_SESSION['login'] = 'yes';
+                    $_SESSION['name'] = $results['name'];
+                    $_SESSION['user_id'] = $results['id'];
+                    $_SESSION['permission'] = $results['type'];
+                    //$_SESSION['mail'] = $mail;
+                
+                    return json_encode([
+                        'success' => true,
+                        'action' => 'authorization',
+                        'redirect' => '/'
+                    ]);
+                } else {
+                    return json_encode([
+                        'success' => false,
+                        'action' => 'authorization',
+                        'message' => 'Неправильная почта или пароль'
+                    ]);
+                }
             } else {
                 return json_encode([
                     'success' => false,
@@ -87,11 +105,8 @@ class Database {
                 ]);
             }
         } else {
-            return json_encode([
-                'success' => false,
-                'action' => 'authorization',
-                'message' => 'Неправильная почта или пароль'
-            ]);
+            header('Location: /');
+            exit();
         }
     }
 

@@ -22,10 +22,16 @@ class Database {
             $stmt = $this->connect->prepare($query);
             $stmt->execute([$mail, $passwordHash, $name, 'default']);
     
-            header('Location: /authorization');
-            exit();
+            return json_encode([
+                'success' => true,
+                'action' => 'registration'
+            ]);
         } else {
-            // Если пользователь с таким мейлом уже существует
+            return json_encode([
+                'success' => false,
+                'action' => 'registration',
+                'message' => 'Почта уже зарегистрирована'
+            ]);
         }
     }
 
@@ -53,25 +59,37 @@ class Database {
     public function getUser() { // Для авторизации
         $mail = $_POST["mail"];
         $password = $_POST["password"];
+
         if ($this->checkMail($mail)) {
             $query = "SELECT * FROM users WHERE mail = ?";
             $stmt = $this->connect->prepare($query);
             $stmt->execute([$mail]);
             $results = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
-            
+
             if (password_verify($password, $results['password'])) {
                 $_SESSION['login'] = 'yes';
                 $_SESSION['name'] = $results['name'];
                 $_SESSION['user_id'] = $results['id'];
                 $_SESSION['permission'] = $results['type'];
                 //$_SESSION['mail'] = $mail;
-                header('Location: /');
-                exit();
+    
+                return json_encode([
+                    'success' => true,
+                    'action' => 'authorization'
+                ]);
             } else {
-            // Неправильный лог пасс
+                return json_encode([
+                    'success' => false,
+                    'action' => 'authorization',
+                    'message' => 'Неправильная почта или пароль'
+                ]);
             }
         } else {
-            // Неправильный лог пасс
+            return json_encode([
+                'success' => false,
+                'action' => 'authorization',
+                'message' => 'Неправильная почта или пароль'
+            ]);
         }
     }
 

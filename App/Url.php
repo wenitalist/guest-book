@@ -28,19 +28,23 @@ class Url {
         }
         elseif ($url === self::MASS_URL[3]) { // Авторизация
             $database = new Database();
-            $database->getUser();
+            echo $database->getUser();
+            exit();
         }
         elseif ($url === self::MASS_URL[4]) { // Регистрация
             $database = new Database();
-            $database->newUser();
+            echo $database->newUser();
+            exit();
         }
         elseif ($url === self::MASS_URL[5]) { // Новый комментарий
             $database = new Database();
             $database->newComment();
+            exit();
         }
         elseif ($url === self::MASS_URL[6]) { // Выход с аккаунта
             $database = new Database();
             $database->logout();
+            exit();
         }
         else { // Страница не найдена
             return "../views/error404.php";

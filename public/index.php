@@ -11,6 +11,8 @@ if (!isset($_SESSION['login'])) {
     $_SESSION['login'] = 'no';
 }
 
+$classUrl = new \App\Url;
+$response = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
 ?>
 
 <DOCTYPE html>
@@ -19,15 +21,15 @@ if (!isset($_SESSION['login'])) {
         <meta charset="UTF-8">
         <title>Главная страница</title>
         <link href="style.css" rel="stylesheet">
+        <script src="../js/script.js"></script>
     </header>
     <main>
         <div class='main-block'>
             <?php 
+            if (str_contains($response, '.php')) {
                 require_once("../views/menu.php");
-
-                $classUrl = new \App\Url;
-                $page = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
-                require_once($page);
+                require_once($response);
+            }
             ?>
         </div>
     </main>

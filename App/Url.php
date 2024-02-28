@@ -33,7 +33,7 @@ class Url {
         }
         elseif ($url === self::MASS_URL[4]) { // Регистрация
             $database = new Database();
-            $database->newUser();
+            echo $database->newUser();
             exit();
         }
         elseif ($url === self::MASS_URL[5]) { // Новый комментарий

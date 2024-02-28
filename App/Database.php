@@ -22,10 +22,16 @@ class Database {
             $stmt = $this->connect->prepare($query);
             $stmt->execute([$mail, $passwordHash, $name, 'default']);
     
-            header('Location: /authorization');
-            exit();
+            return json_encode([
+                'success' => true,
+                'action' => 'registration'
+            ]);
         } else {
-            // Если пользователь с таким мейлом уже существует
+            return json_encode([
+                'success' => false,
+                'action' => 'registration',
+                'message' => 'Почта уже зарегистрирована'
+            ]);
         }
     }
 

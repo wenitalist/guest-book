@@ -2,7 +2,7 @@
     <?php 
         if ($_SESSION['login'] === 'no') {
             echo "<h2>Регистрация</h2>
-            <form action='/regis' class='form' method='POST'>
+            <form id='auth-form' action='/regis' class='form' method='POST'>
                 <label>
                     Имя:
                     <input required class='authentication' type='text' maxlength='50' name='name'>
@@ -16,6 +16,7 @@
                     <input required class='authentication' type='password' maxlength='20' name='password'>
                 </label>
                 <button class='auth-button' type='submit'>Зарегистрироваться</button>
+                <p id='error-message'></p>
             </form>";
         } else {
             header("Location: /");

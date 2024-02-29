@@ -3,6 +3,12 @@ html {
     background-color: rgb(190, 190, 190);
 }
 
+.error404 {
+    font-size: 70px;
+    display: flex;
+    justify-content: center;
+}
+
 a {
     width: 5%;
 }
@@ -18,7 +24,7 @@ li {
 
 li:nth-child(2) {
     margin-left: auto;
-  }
+}
 
 nav {
     border-bottom: 2px solid black;
@@ -40,34 +46,48 @@ nav {
     margin: 0px;
 }
 
-.form {
+.authorization-link, .registration-link, .logout-link {
+    text-decoration: none;
+}
+
+#auth-form {
     padding-top: 1%;
     padding-left: 3%;
     display: flex;
     flex-direction: column;
 }
 
-.error404 {
-    font-size: 70px;
+#publish-form {
+    padding-top: 1%;
+    padding-left: 3%;
+    width: 65%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
 }
 
-.auth-button, .comment-button {
+.comment-button {
+    width: 40%;
+    margin-left: auto;
+    font-size: 20px;
+    margin-top: 2%;
+    cursor: pointer;
+}
+
+.comment-input-name {
+    font-size: 20px;
+    width: 40%;
+}
+
+.auth-button {
     width: auto;
     font-size: 20px;
     margin-top: 5%;
+    cursor: pointer;
 }
 
-.authentication, .comment-input {
+.authentication {
     font-size: 20px;
     width: 100%;
-}
-
-#error-message {
-    color: white;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .comment-input-text {
@@ -76,6 +96,12 @@ nav {
     height: 120px;
     resize: none;
     overflow-wrap: break-word;
+}
+
+#error-message {
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .authorization, .registration, .new-comment {
@@ -93,10 +119,22 @@ nav {
 
 .comment-block {
     display: flex;
-    flex-direction: column;
     background-color: rgb(191, 237, 248);
-    margin: 3%;
+    flex-direction: column;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-bottom: 2%;
+    margin-top: 2%;
     padding: 1%;
+}
+
+.row-comment {
+    display: flex;
+}
+
+.column-comment {
+    display: flex;
+    flex-direction: column;
 }
 
 .content {
@@ -114,4 +152,48 @@ nav {
     margin-left: auto;
     margin-top: 0px;
     margin-bottom: 0px;
+}
+
+.check-boxes {
+    cursor: pointer;
+    transform: scale(1.15, 1.15);
+}
+
+.check-boxes-text {
+    cursor: pointer;
+    margin-right: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.admin-panel {
+    border-top: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+}
+
+.admin-panel h3 {
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1%;
+}
+
+.admin-panel-del-comments-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2%;
+    margin-right: auto;
+    margin-left: 3%;
+}
+
+#del-form {
+    margin: 0px;
+}
+
+.del-button {
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 5px;
 }

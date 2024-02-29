@@ -15,7 +15,7 @@
                     Фамилия:
                     <input type='text' name='secondName' tabindex='-1'>
                 </label>
-                <button class='auth-button' type='submit'>Авторизироваться</button>
+                <button class='auth-button' type='submit'>Авторизоваться</button>
                 <p id='error-message'></p>
             </form>";
         } else {

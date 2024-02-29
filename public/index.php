@@ -9,6 +9,7 @@ session_start();
 
 if (!isset($_SESSION['login'])) {
     $_SESSION['login'] = 'no';
+    $_SESSION['permission'] = 'default';
 }
 
 $classUrl = new \App\Url;

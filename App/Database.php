@@ -140,10 +140,15 @@ class Database {
             $stmt = $this->connect->prepare($query);
             $stmt->execute($_POST['checkBoxes']);
 
-            header('Location: /');
-            exit();
+            return json_encode([
+                'success' => true,
+                'redirect' => '/'
+            ]);
         } else {
-            // Если выбрано 0 чек боксов
+            return json_encode([
+                'success' => false,
+                'message' => 'Выбрано 0 комментариев'
+            ]);
         }
     }
 }

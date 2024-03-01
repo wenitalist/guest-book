@@ -24,6 +24,7 @@ if ($_SESSION['permission'] === 'admin') {
         <div class='admin-panel-del-comments-row'>
             <label>Удалить выбранные комментарии: </label>
             <button class='del-button' id='del-button' type='submit' form='del-form'>Удалить</button>
+            <p id='del-message'></p>
         </div>
     </div>";
 }

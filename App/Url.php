@@ -44,7 +44,7 @@ class Url {
         }
         elseif ($url === self::MASS_URL[6]) { // Удаление комментариев
             $database = new Database();
-            $database->deleteComments();
+            echo $database->deleteComments();
             exit();
         }
         elseif ($url === self::MASS_URL[7]) { // Выход с аккаунта

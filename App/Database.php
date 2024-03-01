@@ -52,7 +52,7 @@ class Database {
 
     public function newComment() { // Для сохранения нового комментария
         if (!$_POST['secondName']) {
-            $name = isset($_POST['name']) ? $_POST['name'] : $_SESSION['name'];
+            $name = isset($_POST['name']) ? $_POST['name'] : null;
             $content = $_POST['comment'];
 
             $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
@@ -119,10 +119,36 @@ class Database {
     }
 
     public function getComments() { // Получить все комментарии
-        $query = "SELECT comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
+        $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
                   FROM comments LEFT JOIN users ON comments.user_id = users.id ORDER BY date_time DESC";
         $stmt = $this->connect->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function deleteComments() { // Удаление комментариев 
+        if ($_POST['checkBoxes']) {
+            $query = "DELETE FROM comments WHERE id IN (";
+
+            for($i = 0; $i < count($_POST['checkBoxes']); $i++) {
+                $query = $query . '?';
+                if (($i + 1) !== count($_POST['checkBoxes'])) {
+                    $query = $query . ', ';
+                }
+            }
+            $query = $query . ");";
+            $stmt = $this->connect->prepare($query);
+            $stmt->execute($_POST['checkBoxes']);
+
+            return json_encode([
+                'success' => true,
+                'redirect' => '/'
+            ]);
+        } else {
+            return json_encode([
+                'success' => false,
+                'message' => 'Выбрано 0 комментариев'
+            ]);
+        }
     }
 }

@@ -8,7 +8,8 @@ class Connect {
     private static $instance;
 
     private function __construct() {
-        $this->connection = new \PDO('mysql:host=localhost;dbname=guest_book', 'wenitalist', '904067');
+        require_once('../env.php');
+        $this->connection = new \PDO("mysql:host={$env['DB_HOST']};dbname={$env['DB_NAME']}", $env['DB_USER'], $env['DB_PASSWORD']);
         $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 

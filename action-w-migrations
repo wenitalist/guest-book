@@ -11,7 +11,7 @@ switch ($action) {
     case 'make':
         if ($name) {
             $migrationClass->make($name);
-            echo "Миграция создана";
+            echo "Миграция создана\n";
             exit();
         }
         echo "Введите название для миграции\n";

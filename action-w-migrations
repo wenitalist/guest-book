@@ -1,0 +1,24 @@
+<?php
+
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$migrationClass = new \App\Migrations;
+
+$action = $argv[1] ?? null;
+$name = $argv[2] ?? null;
+
+switch ($action) {
+    case 'make':
+        if ($name) {
+            $migrationName = $migrationClass->make($name);
+            echo "Миграция создана: {$migrationName}\n";
+            exit();
+        }
+        echo "Введите название для миграции\n";
+        exit();
+    case 'apply':
+        $migrationClass->apply();
+        exit();
+    default:
+        echo "Формат ввода команды: php action-w-migrations 'действие' 'имя-для-миграции'\n";
+}

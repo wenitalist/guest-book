@@ -8,7 +8,7 @@ class Connect {
     private static $instance;
 
     private function __construct() {
-        require_once('../env.php');
+        require_once(__DIR__ . '/../env.php');
         $this->connection = new \PDO("mysql:host={$env['DB_HOST']};dbname={$env['DB_NAME']}", $env['DB_USER'], $env['DB_PASSWORD']);
         $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }

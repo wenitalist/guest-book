@@ -10,8 +10,8 @@ $name = $argv[2] ?? null;
 switch ($action) {
     case 'make':
         if ($name) {
-            $migrationClass->make($name);
-            echo "Миграция создана\n";
+            $migrationName = $migrationClass->make($name);
+            echo "Миграция создана: {$migrationName}\n";
             exit();
         }
         echo "Введите название для миграции\n";
@@ -20,5 +20,5 @@ switch ($action) {
         $migrationClass->apply();
         exit();
     default:
-        echo "Формат ввода команды: php action-w-migrations 'действие' 'имя для миграции'\n";
+        echo "Формат ввода команды: php action-w-migrations 'действие' 'имя-для-миграции'\n";
 }

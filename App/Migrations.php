@@ -82,6 +82,7 @@ class Migrations {
             echo "Миграция применена: {$temp}\n";
         } catch (Exception $e) {
             echo "Ошибка при применении: {$temp}\n";
+            exit();
         }
     }
 

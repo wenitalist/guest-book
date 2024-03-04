@@ -7,7 +7,7 @@ class UsersTable {
             mail VARCHAR(40) NOT NULL,
             password VARCHAR(255) NOT NULL,
             name VARCHAR(50) NOT NULL,
-            type VARCHAR(15) NOT NULL,
+            type VARCHAR(15) NOT NULL
         )";
     }
 }

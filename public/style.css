@@ -65,9 +65,20 @@ nav {
     flex-direction: column;
 }
 
+.publish-form-row {
+    display: flex;
+    flex-direction: row;
+}
+
+#publish-form-error-message {
+    margin-left: auto;
+    margin-right: 2%;
+    margin-bottom: 0px;
+    margin-top: 2%;
+}
+
 .comment-button {
     width: 40%;
-    margin-left: auto;
     font-size: 20px;
     margin-top: 2%;
     cursor: pointer;

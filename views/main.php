@@ -3,18 +3,21 @@
     <form id='publish-form' action='/publish' method='POST'>
         <?php 
         if ($_SESSION['login'] === 'no') {
-            echo "<label for='name'>Имя:</label><input id='name' required class='comment-input-name' type='text' maxlength='40' name='name'>";
+            echo "<label for='inputName'>Имя:</label><input required id='inputName' class='comment-input-name' type='text' maxlength='40' name='name'>";
         }
         ?>
         <label>
             Комментарий:
-            <textarea class='comment-input-text' required maxlength='255' name='comment'></textarea>
+            <textarea required id='inputComment' class='comment-input-text' maxlength='255' name='comment'></textarea>
         </label>
         <label style='display:none'> <!-- Защита от ботов -->
             Фамилия:
             <input type='text' name='secondName' tabindex='-1'>
         </label>
-        <button class='comment-button' type='submit'>Опубликовать</button>
+        <div class='publish-form-row'>
+            <p id='publish-form-error-message'></p>
+            <button class='comment-button' type='submit'>Опубликовать</button>
+        </div>
     </form>
 </div>
 <?php 

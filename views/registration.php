@@ -5,15 +5,15 @@
             <form id='auth-form' action='/regis' class='form' method='POST'>
                 <label>
                     Имя:
-                    <input required class='authentication' type='text' maxlength='50' name='name'>
+                    <input required id='inputName' class='authentication' type='text' maxlength='50' name='name'>
                 </label>
                 <label>
                     Почта:
-                    <input required class='authentication' type='email' maxlength='40' name='mail'>
+                    <input required id='inputMail' class='authentication' type='email' maxlength='40' name='mail'>
                 </label>
                 <label>
                     Пароль:
-                    <input required class='authentication' type='password' maxlength='20' name='password'>
+                    <input required id='inputPassword' class='authentication' type='password' maxlength='20' name='password'>
                 </label>
                 <label style='display:none'> <!-- Защита от ботов -->
                     Фамилия:

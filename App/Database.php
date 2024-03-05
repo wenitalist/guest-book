@@ -59,11 +59,17 @@ class Database {
             $stmt = $this->connect->prepare($query);
             $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
 
-            header('Location: /');
-            exit();
+            return json_encode([
+                'success' => true,
+                'action' => 'publish',
+                'redirect' => '/'
+            ]);
         } else {
-            header('Location: /');
-            exit();
+            return json_encode([
+                'success' => false,
+                'action' => 'publish',
+                'message' => 'Ошибка при публикации'
+            ]);
         }
     }
 

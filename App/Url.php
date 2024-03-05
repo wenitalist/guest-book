@@ -39,7 +39,7 @@ class Url {
         }
         elseif ($url === self::MASS_URL[5]) { // Новый комментарий
             $database = new Database();
-            $database->newComment();
+            echo $database->newComment();
             exit();
         }
         elseif ($url === self::MASS_URL[6]) { // Удаление комментариев

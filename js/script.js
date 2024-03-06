@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let message = document.getElementById('publish-form-error-message');
             let link = 'http://wenitalist.local:80' + form.getAttribute('action');
 
-            if (validateName(inputName.value)) {
+            if (!validateName(inputName.value)) {
                 message.innerHTML = 'Неправильный формат имени';
                 message.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
                 return;

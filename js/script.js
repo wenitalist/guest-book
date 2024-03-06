@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let message = document.getElementById('publish-form-error-message');
             let link = protocol + domain + form.getAttribute('action');
 
-            if (!validateName(inputName.value)) {
+            if (inputName && !validateName(inputName.value)) {
                 message.innerHTML = 'Неправильный формат имени';
                 message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;

@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() { 
+
+    var errorColor = 'rgb(222, 1, 1)';
+    var errorFontSize = '22px';
+
     if (window.location.pathname === '/authorization' || window.location.pathname === '/registration') {
 
         const inputName = document.getElementById('inputName');
@@ -13,19 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
             let errorMessage = document.getElementById('error-message');
             let link = 'http://wenitalist.local:80' + form.getAttribute('action');
 
-            let regexForName = /^[A-Za-zА-ЯЁа-яё. ]+/u;
-            let regexForMail = /^[A-Za-z0-9_-]+@[A-Za-z.]+$/;
-            let regexForPass = /^[A-Za-z0-9!#$%&?*~_-]+/;
-
-            if (inputName && !regexForName.test(inputName.value)) {
+            if (inputName && !validateName(inputName.value)) {
                 errorMessage.innerHTML = 'Неправильный формат имени';
                 errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
                 return;
-            } else if (!regexForMail.test(inputMail.value)) {
+            } else if (!validateMail(inputMail.value)) {
                 errorMessage.innerHTML = 'Неправильный формат почты';
                 errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
                 return;
-            } else if (!regexForPass.test(inputPassword.value)) {
+            } else if (!validatePassword(inputPassword.value)) {
                 errorMessage.innerHTML = 'Неправильный формат пароля';
                 errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
                 return;
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         inputMail.addEventListener('keypress', function(event) {
             let inputChar = event.key;
-            let regex = /^[A-Za-z0-9.@_-]+/;
+            let regex = new RegExp(/^[A-Za-z0-9.@_-]+/);
 
             if (!regex.test(inputChar)) {
                 event.preventDefault();
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         inputPassword.addEventListener('keypress', function(event) {
             let inputChar = event.key;
-            let regex = /^[A-Za-z0-9!#$%&?*~_-]+/;
+            let regex = new RegExp(/^[A-Za-z0-9!#$%&?*~_-]+/);
 
             if (!regex.test(inputChar)) {
                 event.preventDefault();
@@ -71,13 +71,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputName) {
             inputName.addEventListener('keypress', function(event) {
                 let inputChar = event.key;
-                let regex = /^[A-Za-zА-ЯЁа-яё. ]+/u;
+                let regex = new RegExp(/^[A-Za-zА-ЯЁа-яё. ]+/u);
     
                 if (!regex.test(inputChar)) {
                     event.preventDefault();
                 }
             });
         }
+    }
+
+    function validatePassword(pass) {
+        let regex = new RegExp(/^[A-Za-z0-9!#$%&?*~_-]+/);
+
+        return regex.test(pass);
+    }
+
+    function validateName(name) {
+        let regex = new RegExp(/^[A-Za-zА-ЯЁа-яё. ]+/u);
+
+        return regex.test(name);
+    }
+
+    function validateMail(mail) {
+        let regex = new RegExp(/^[A-Za-z0-9_-]+@[A-Za-z.]+$/);
+
+        return regex.test(mail);
     }
 
     if (window.location.pathname === '/') {
@@ -93,8 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let message = document.getElementById('publish-form-error-message');
             let link = 'http://wenitalist.local:80' + form.getAttribute('action');
 
-            let regexForName = /^[A-Za-zА-ЯЁа-яё. ]+/u;
-            if (!regexForName.test(inputName.value)) {
+            if (validateName(inputName.value)) {
                 message.innerHTML = 'Неправильный формат имени';
                 message.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
                 return;
@@ -122,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputName) {
             inputName.addEventListener('keypress', function(event) {
                 let inputChar = event.key;
-                let regex = /^[A-Za-zА-ЯЁа-яё. ]+/u;
+                let regex = new RegExp(/^[A-Za-zА-ЯЁа-яё. ]+/u);
     
                 if (!regex.test(inputChar)) {
                     event.preventDefault();

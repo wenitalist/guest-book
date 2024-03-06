@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var errorColor = 'rgb(222, 1, 1)';
     var errorFontSize = '22px';
 
+    var protocol = window.location.protocol + '//';
+    var domain = window.location.host;
+
     if (window.location.pathname === '/authorization' || window.location.pathname === '/registration') {
 
         const inputName = document.getElementById('inputName');
@@ -15,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             let errorMessage = document.getElementById('error-message');
-            let link = 'http://wenitalist.local:80' + form.getAttribute('action');
+            let link = protocol + domain + form.getAttribute('action');
 
             if (inputName && !validateName(inputName.value)) {
                 errorMessage.innerHTML = 'Неправильный формат имени';
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             let message = document.getElementById('publish-form-error-message');
-            let link = 'http://wenitalist.local:80' + form.getAttribute('action');
+            let link = protocol + domain + form.getAttribute('action');
 
             if (!validateName(inputName.value)) {
                 message.innerHTML = 'Неправильный формат имени';
@@ -156,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             let message = document.getElementById('del-message');
-            let link = 'http://wenitalist.local:80' + form.getAttribute('action');
+            let link = protocol + domain + form.getAttribute('action');
 
             try {
                 const response = await fetch(link, {

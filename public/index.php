@@ -21,16 +21,14 @@ $response = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
     <header>
         <meta charset="UTF-8">
         <link href="style.css" rel="stylesheet">
-        <?php echo $classUrl->setTitle($_SERVER['REQUEST_URI']) ?>
         <script src="../js/script.js"></script>
+        <?php echo $classUrl->setTitle($_SERVER['REQUEST_URI']) ?>
     </header>
     <main>
         <div class='main-block'>
             <?php 
-            if (str_contains($response, '.php')) {
                 require_once("../views/menu.php");
                 require_once($response);
-            }
             ?>
         </div>
     </main>

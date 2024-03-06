@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() { 
 
-    var errorColor = 'rgb(222, 1, 1)';
-    var errorFontSize = '22px';
+    var errorColor = 'rgb(222, 1, 1);';
+    var errorFontSize = '22px;';
 
     var protocol = window.location.protocol + '//';
     var domain = window.location.host;
@@ -22,15 +22,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (inputName && !validateName(inputName.value)) {
                 errorMessage.innerHTML = 'Неправильный формат имени';
-                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             } else if (!validateMail(inputMail.value)) {
                 errorMessage.innerHTML = 'Неправильный формат почты';
-                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             } else if (!validatePassword(inputPassword.value)) {
                 errorMessage.innerHTML = 'Неправильный формат пароля';
-                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             };
 
@@ -43,13 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (data['success'] === false) {
                     errorMessage.innerHTML = data['message'];
-                    errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                    errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 } else {
                     window.location.href = data['redirect'];
                 }
             } catch (error) {
                 errorMessage.innerHTML = 'Ошибка на сервере';
-                errorMessage.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });
 
@@ -104,8 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname === '/') {
 
         const inputName = document.getElementById('inputName');
-        //const inputComment = document.getElementById('inputComment');
-
         const form = document.getElementById('publish-form');
 
         form.addEventListener('submit', async function(event) {
@@ -116,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!validateName(inputName.value)) {
                 message.innerHTML = 'Неправильный формат имени';
-                message.style.cssText = 'color: rgb(222, 1, 1); font-size: 22px;';
+                message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             }
 
@@ -131,11 +129,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = data['redirect'];
                 } else {
                     message.innerHTML = data['message'];
-                    message.style.cssText = 'color: rgb(222, 1, 1)';
+                    message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 }
             } catch (error) {
                 message.innerHTML = 'Ошибка на сервере';
-                message.style.cssText = 'color: rgb(222, 1, 1)';
+                message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });
 
@@ -172,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = data['redirect'];
                 } else {
                     message.innerHTML = data['message'];
-                    message.style.cssText = 'color: rgb(222, 1, 1)';
+                    message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 }
             } catch (error) {
                 message.innerHTML = 'Ошибка на сервере';
-                message.style.cssText = 'color: rgb(222, 1, 1)';
+                message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });
     }

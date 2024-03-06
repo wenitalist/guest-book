@@ -117,11 +117,16 @@ class Database {
     }
 
     public function logout() { // Выход с аккаунта
-        session_unset();
-        session_destroy();
-
-        header('Location: /');
-        exit();
+        if ($_SESSION['login'] === 'yes') {
+            session_unset();
+            session_destroy();
+    
+            header('Location: /');
+            exit();
+        } else {
+            header('Location: /');
+            exit();
+        }
     }
 
     public function getComments() { // Получить все комментарии
@@ -133,27 +138,34 @@ class Database {
     }
 
     public function deleteComments() { // Удаление комментариев 
-        if ($_POST['checkBoxes']) {
-            $query = "DELETE FROM comments WHERE id IN (";
-
-            for($i = 0; $i < count($_POST['checkBoxes']); $i++) {
-                $query = $query . '?';
-                if (($i + 1) !== count($_POST['checkBoxes'])) {
-                    $query = $query . ', ';
+        if (!$_SESSION['permission'] === 'admin') {
+            if ($_POST['checkBoxes']) {
+                $query = "DELETE FROM comments WHERE id IN (";
+    
+                for($i = 0; $i < count($_POST['checkBoxes']); $i++) {
+                    $query = $query . '?';
+                    if (($i + 1) !== count($_POST['checkBoxes'])) {
+                        $query = $query . ', ';
+                    }
                 }
+                $query = $query . ");";
+                $stmt = $this->connect->prepare($query);
+                $stmt->execute($_POST['checkBoxes']);
+    
+                return json_encode([
+                    'success' => true,
+                    'redirect' => '/'
+                ]);
+            } else {
+                return json_encode([
+                    'success' => false,
+                    'message' => 'Выбрано 0 комментариев'
+                ]);
             }
-            $query = $query . ");";
-            $stmt = $this->connect->prepare($query);
-            $stmt->execute($_POST['checkBoxes']);
-
-            return json_encode([
-                'success' => true,
-                'redirect' => '/'
-            ]);
         } else {
             return json_encode([
                 'success' => false,
-                'message' => 'Выбрано 0 комментариев'
+                'message' => 'Доступ запрещен'
             ]);
         }
     }

@@ -28,28 +28,28 @@ class Url {
             return "../views/registration.php";
         }
         elseif ($url === self::MASS_URL[3]) { // Авторизация
-            $database = new Database();
-            echo $database->getUser();
+            $auth = new Auth();
+            echo $auth->getUser();
             exit();
         }
         elseif ($url === self::MASS_URL[4]) { // Регистрация
-            $database = new Database();
-            echo $database->newUser();
+            $auth = new Auth();
+            echo $auth->newUser();
             exit();
         }
         elseif ($url === self::MASS_URL[5]) { // Новый комментарий
-            $database = new Database();
-            echo $database->newComment();
+            $comments = new Comments();
+            echo $comments->newComment();
             exit();
         }
         elseif ($url === self::MASS_URL[6]) { // Удаление комментариев
-            $database = new Database();
-            echo $database->deleteComments();
+            $comments = new Comments();
+            echo $comments->deleteComments();
             exit();
         }
         elseif ($url === self::MASS_URL[7]) { // Выход с аккаунта
-            $database = new Database();
-            $database->logout();
+            $auth = new Auth();
+            $auth->logout();
             exit();
         }
         else { // Страница не найдена

@@ -36,8 +36,8 @@ if ($_SESSION['permission'] === 'admin') {
         <?php 
         if ($_SESSION['permission'] === 'admin') { echo "<form id='del-form' action='/delete' method='POST'>"; }
 
-        $database = new App\Database;
-        $results = $database->getComments();
+        $comments = new App\Comments;
+        $results = $comments->getComments();
         $delCheckBox = "";
 
         foreach ($results as $row) {

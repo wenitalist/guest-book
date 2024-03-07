@@ -138,7 +138,7 @@ class Database {
     }
 
     public function deleteComments() { // Удаление комментариев 
-        if (!$_SESSION['permission'] === 'admin') {
+        if ($_SESSION['permission'] === 'admin') {
             if ($_POST['checkBoxes']) {
                 $query = "DELETE FROM comments WHERE id IN (";
     

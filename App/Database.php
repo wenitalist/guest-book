@@ -53,7 +53,7 @@ class Database {
     public function newComment() { // Для сохранения нового комментария
         if (!$_POST['secondName']) {
             $name = isset($_POST['name']) ? $_POST['name'] : null;
-            $content = $_POST['comment'];
+            $content = htmlspecialchars($_POST['comment']);
 
             $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
             $stmt = $this->connect->prepare($query);

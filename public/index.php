@@ -3,6 +3,9 @@
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 
+$JS_VERSION = 1;
+$CSS_VERSION = 1;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 session_start();
@@ -20,8 +23,10 @@ $response = $classUrl->checkUrl($_SERVER['REQUEST_URI']);
 <html lang="ru">
     <header>
         <meta charset="UTF-8">
-        <link href="style.css" rel="stylesheet">
-        <script src="../js/script.js"></script>
+        <?php 
+            echo "<link href='style.css?v={$CSS_VERSION}' rel='stylesheet'>
+                <script src='../js/script.js?v={$JS_VERSION}'></script>";
+        ?>
         <?php echo $classUrl->setTitle($_SERVER['REQUEST_URI']) ?>
     </header>
     <main>

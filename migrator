@@ -20,5 +20,5 @@ switch ($action) {
         $migrationClass->apply();
         exit();
     default:
-        echo "Формат ввода команды: php action-w-migrations 'действие' 'имя-для-миграции'\n";
+        echo "Формат ввода команды: php migrator 'действие' 'имя-для-миграции'\n";
 }

@@ -21,15 +21,15 @@ document.addEventListener('DOMContentLoaded', function() {
             let link = protocol + domain + form.getAttribute('action');
 
             if (inputName && !validateName(inputName.value)) {
-                errorMessage.innerHTML = 'Неправильный формат имени';
+                errorMessage.textContent = 'Неправильный формат имени';
                 errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             } else if (!validateMail(inputMail.value)) {
-                errorMessage.innerHTML = 'Неправильный формат почты';
+                errorMessage.textContent = 'Неправильный формат почты';
                 errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             } else if (!validatePassword(inputPassword.value)) {
-                errorMessage.innerHTML = 'Неправильный формат пароля';
+                errorMessage.textContent = 'Неправильный формат пароля';
                 errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             };
@@ -42,13 +42,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (data['success'] === false) {
-                    errorMessage.innerHTML = data['message'];
+                    errorMessage.textContent = data['message'];
                     errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 } else {
                     window.location.href = data['redirect'];
                 }
             } catch (error) {
-                errorMessage.innerHTML = 'Ошибка на сервере';
+                errorMessage.textContent = 'Ошибка на сервере';
                 errorMessage.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let link = protocol + domain + form.getAttribute('action');
 
             if (inputName && !validateName(inputName.value)) {
-                message.innerHTML = 'Неправильный формат имени';
+                message.textContent = 'Неправильный формат имени';
                 message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 return;
             }
@@ -128,11 +128,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data['success'] === true) {
                     window.location.href = data['redirect'];
                 } else {
-                    message.innerHTML = data['message'];
+                    message.textContent = data['message'];
                     message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 }
             } catch (error) {
-                message.innerHTML = 'Ошибка на сервере';
+                message.textContent = 'Ошибка на сервере';
                 message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });
@@ -169,11 +169,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data['success'] === true) {
                     window.location.href = data['redirect'];
                 } else {
-                    message.innerHTML = data['message'];
+                    message.textContent = data['message'];
                     message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
                 }
             } catch (error) {
-                message.innerHTML = 'Ошибка на сервере';
+                message.textContent = 'Ошибка на сервере';
                 message.style.cssText = `color: ${errorColor} font-size: ${errorFontSize}`;
             }
         });

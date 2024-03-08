@@ -1,6 +1,6 @@
 <div class='new-comment'>
     <h2>Оставить комментарий</h2>
-    <form id='publish-form' action='/publish' method='POST'>
+    <form id='publish-form' action='/publish' method='POST' enctype="multipart/form-data">
         <?php 
         if ($_SESSION['login'] === 'no') {
             echo "<label for='inputName'>Имя:</label><input required id='inputName' class='comment-input-name' type='text' maxlength='40' name='name'>";
@@ -10,6 +10,7 @@
             Комментарий:
             <textarea required id='inputComment' class='comment-input-text' maxlength='255' name='comment'></textarea>
         </label>
+        <input type="file" id='inputImages' name="images[]" multiple accept="image/jpeg">
         <label style='display:none'> <!-- Защита от ботов -->
             Фамилия:
             <input type='text' name='secondName' tabindex='-1'>

@@ -77,6 +77,11 @@ nav {
     margin-top: 2%;
 }
 
+#inputImages, input[type=file]::-webkit-file-upload-button {
+    margin-top: 2px;
+    cursor: pointer;
+}
+
 .comment-button {
     width: 40%;
     font-size: 20px;

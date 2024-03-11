@@ -24,6 +24,18 @@ class Comments {
     public function newComment() { // Для сохранения нового комментария
         try {
             if (!$_POST['secondName']) {
+                if ($_FILES['images']['name'][0]) {
+                    
+                    $images = $this->getImages($_FILES['images']);
+
+                    if (count($images) > 5 || $this->checkSizeImages($images)) {
+                        return json_encode([
+                            'success' => false,
+                            'action' => 'publish',
+                            'message' => 'Ошибка при загрузке картинок'
+                        ]);
+                    }
+                }
 
                 $name = isset($_POST['name']) ? $_POST['name'] : null;
                 $content = htmlspecialchars($_POST['comment']);
@@ -34,10 +46,9 @@ class Comments {
     
                 if ($_FILES['images']['name'][0]) {
                     $index = $this->connect->lastInsertId();
-                    $images = $this->getImages($_FILES['images']);
                     $this->saveImages($index, $images);
                 }
-    
+
                 return json_encode([
                     'success' => true,
                     'action' => 'publish',
@@ -56,24 +67,6 @@ class Comments {
                 'action' => 'publish',
                 'message' => 'Ошибка при публикации'
             ]);
-        }
-    }
-
-    public function saveImages($commentIndex, array $images) {
-        foreach ($images as $image) {
-            move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
-
-            $miniature = $this->createMiniature($image);
-
-            $saveMiniature = "INSERT INTO miniatures (miniature_blob) VALUES (?)";
-            $stmt = $this->connect->prepare($saveMiniature);
-            $stmt->execute([$miniature]);
-
-            $miniatureIndex = $this->connect->lastInsertId();
-
-            $saveOriginal = "INSERT INTO images (name, comment_id, miniature_id) VALUES (?, ?, ?)";
-            $stmt = $this->connect->prepare($saveOriginal);
-            $stmt->execute([$image['name'], $commentIndex, $miniatureIndex]);
         }
     }
 
@@ -126,6 +119,24 @@ class Comments {
         return $result;
     }
 
+    public function saveImages($commentIndex, array $images) {
+        foreach ($images as $image) {
+            move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
+
+            $miniature = $this->createMiniature($image);
+
+            $saveMiniature = "INSERT INTO miniatures (miniature_blob) VALUES (?)";
+            $stmt = $this->connect->prepare($saveMiniature);
+            $stmt->execute([$miniature]);
+
+            $miniatureIndex = $this->connect->lastInsertId();
+
+            $saveOriginal = "INSERT INTO images (name, comment_id, miniature_id) VALUES (?, ?, ?)";
+            $stmt = $this->connect->prepare($saveOriginal);
+            $stmt->execute([$image['name'], $commentIndex, $miniatureIndex]);
+        }
+    }
+
     public function createMiniature(array $original) {
         $path = __DIR__ . "/../images/";
 
@@ -145,5 +156,15 @@ class Comments {
         imagedestroy($originalImage);
 
         return $blob;
+    }
+
+    public function checkSizeImages(array $images) {
+        foreach ($images as $image) {
+            if ($image['size'] >= 1048576) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

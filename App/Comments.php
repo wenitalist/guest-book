@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Exception;
-
 class Comments {
 
     private $connect;
@@ -61,7 +59,7 @@ class Comments {
                     'message' => 'Ошибка при публикации'
                 ]);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return json_encode([
                 'success' => false,
                 'action' => 'publish',
@@ -123,17 +121,16 @@ class Comments {
         foreach ($images as $image) {
             move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
 
+            $saveOriginal = "INSERT INTO images (name, comment_id) VALUES (?, ?)";
+            $stmt = $this->connect->prepare($saveOriginal);
+            $stmt->execute([$image['name'], $commentIndex]);
+
+            $imageIndex = $this->connect->lastInsertId();
             $miniature = $this->createMiniature($image);
 
-            $saveMiniature = "INSERT INTO miniatures (miniature_blob) VALUES (?)";
+            $saveMiniature = "INSERT INTO miniatures (image_id, miniature_blob) VALUES (?, ?)";
             $stmt = $this->connect->prepare($saveMiniature);
-            $stmt->execute([$miniature]);
-
-            $miniatureIndex = $this->connect->lastInsertId();
-
-            $saveOriginal = "INSERT INTO images (name, comment_id, miniature_id) VALUES (?, ?, ?)";
-            $stmt = $this->connect->prepare($saveOriginal);
-            $stmt->execute([$image['name'], $commentIndex, $miniatureIndex]);
+            $stmt->execute([$imageIndex, $miniature]);
         }
     }
 

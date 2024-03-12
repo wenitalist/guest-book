@@ -20,20 +20,46 @@ class Comments {
     }
 
     public function newComment() { // Для сохранения нового комментария
-        if (!$_POST['secondName']) {
-            $name = isset($_POST['name']) ? $_POST['name'] : null;
-            $content = htmlspecialchars($_POST['comment']);
+        try {
+            if (!$_POST['secondName']) {
+                if ($_FILES['images']['name'][0]) {
+                    
+                    $images = $this->getImages($_FILES['images']);
 
-            $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
-            $stmt = $this->connect->prepare($query);
-            $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
+                    if (count($images) > 5 || $this->checkSizeImages($images)) {
+                        return json_encode([
+                            'success' => false,
+                            'action' => 'publish',
+                            'message' => 'Ошибка при загрузке картинок'
+                        ]);
+                    }
+                }
 
-            return json_encode([
-                'success' => true,
-                'action' => 'publish',
-                'redirect' => '/'
-            ]);
-        } else {
+                $name = isset($_POST['name']) ? $_POST['name'] : null;
+                $content = htmlspecialchars($_POST['comment']);
+    
+                $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
+                $stmt = $this->connect->prepare($query);
+                $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
+    
+                if ($_FILES['images']['name'][0]) {
+                    $index = $this->connect->lastInsertId();
+                    $this->saveImages($index, $images);
+                }
+
+                return json_encode([
+                    'success' => true,
+                    'action' => 'publish',
+                    'redirect' => '/'
+                ]);
+            } else {
+                return json_encode([
+                    'success' => false,
+                    'action' => 'publish',
+                    'message' => 'Ошибка при публикации'
+                ]);
+            }
+        } catch (\Exception $e) {
             return json_encode([
                 'success' => false,
                 'action' => 'publish',
@@ -73,5 +99,69 @@ class Comments {
                 'message' => 'Доступ запрещен'
             ]);
         }
+    }
+
+    public function getImages($imagesFiles) {
+        $result = [];
+
+        for ($i = 0; $i < count($imagesFiles['name']); $i++) {
+            $result[] = [
+                'name' => $imagesFiles['name'][$i],
+                'type' => $imagesFiles['type'][$i],
+                'tmp_name' => $imagesFiles['tmp_name'][$i],
+                'error' => $imagesFiles['error'][$i],
+                'size' => $imagesFiles['size'][$i]
+            ];
+        }
+
+        return $result;
+    }
+
+    public function saveImages($commentIndex, array $images) {
+        foreach ($images as $image) {
+            move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
+
+            $saveOriginal = "INSERT INTO images (name, comment_id) VALUES (?, ?)";
+            $stmt = $this->connect->prepare($saveOriginal);
+            $stmt->execute([$image['name'], $commentIndex]);
+
+            $imageIndex = $this->connect->lastInsertId();
+            $miniature = $this->createMiniature($image);
+
+            $saveMiniature = "INSERT INTO miniatures (image_id, miniature_blob) VALUES (?, ?)";
+            $stmt = $this->connect->prepare($saveMiniature);
+            $stmt->execute([$imageIndex, $miniature]);
+        }
+    }
+
+    public function createMiniature(array $original) {
+        $path = __DIR__ . "/../images/";
+
+        list($origWidth, $origHeight) = getimagesize("{$path}{$original['name']}");
+        list($newWidth, $newHeight) = [300, 300];
+
+        $miniature = imagecreatetruecolor($newWidth, $newHeight);
+        $originalImage = imagecreatefromjpeg("{$path}{$original['name']}");
+
+        imagecopyresampled($miniature, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
+
+        ob_start();
+        imagejpeg($miniature, null, 75);
+        $blob = ob_get_clean();
+
+        imagedestroy($miniature);
+        imagedestroy($originalImage);
+
+        return $blob;
+    }
+
+    public function checkSizeImages(array $images) {
+        foreach ($images as $image) {
+            if ($image['size'] >= 1048576) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

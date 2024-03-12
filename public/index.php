@@ -4,7 +4,7 @@
 // ini_set('display_startup_errors', 1);
 
 $JS_VERSION = 1;
-$CSS_VERSION = 1;
+$CSS_VERSION = 1.1;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 

@@ -11,7 +11,7 @@ class Comments {
         $this->connect = $database->getConnection();
     }
 
-    public function getComments() { // Получить все комментарии
+    public function getComments(): array { // Получить все комментарии
         $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
                   FROM comments LEFT JOIN users ON comments.user_id = users.id ORDER BY date_time DESC";
         $stmt = $this->connect->prepare($query);
@@ -19,7 +19,7 @@ class Comments {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function newComment() { // Для сохранения нового комментария
+    public function newComment(): string { // Для сохранения нового комментария
         try {
             if (!$_POST['secondName']) {
                 if ($_FILES['images']['name'][0]) {
@@ -43,7 +43,7 @@ class Comments {
                 $stmt->execute([$content, date('Y-m-d H:i:s'), $_SESSION['user_id'] ?? null, $name]);
     
                 if ($_FILES['images']['name'][0]) {
-                    $index = $this->connect->lastInsertId();
+                    $index = (int)$this->connect->lastInsertId();
                     $this->saveImages($index, $images);
                 }
 
@@ -68,11 +68,13 @@ class Comments {
         }
     }
 
-    public function deleteComments() { // Удаление комментариев 
+    public function deleteComments(): string { // Удаление комментариев 
         if ($_SESSION['permission'] === 'admin') {
             if ($_POST['checkBoxes']) {
+            
+                $imagesNames = $this->getImagesNames();
+
                 $query = "DELETE FROM comments WHERE id IN (";
-    
                 for($i = 0; $i < count($_POST['checkBoxes']); $i++) {
                     $query = $query . '?';
                     if (($i + 1) !== count($_POST['checkBoxes'])) {
@@ -82,6 +84,8 @@ class Comments {
                 $query = $query . ");";
                 $stmt = $this->connect->prepare($query);
                 $stmt->execute($_POST['checkBoxes']);
+
+                $this->deleteImages($imagesNames);
     
                 return json_encode([
                     'success' => true,
@@ -101,7 +105,33 @@ class Comments {
         }
     }
 
-    public function getImages($imagesFiles) {
+    public function deleteImages(array $imagesNames): void {
+        if ($imagesNames) {
+            $path = __DIR__ . "/../images/";
+
+            foreach ($imagesNames as $image) {
+                unlink("{$path}{$image['name']}");
+            }
+        }
+    }
+
+    public function getImagesNames(): array {
+        $query = "SELECT images.name FROM comments RIGHT JOIN images ON comments.id = images.comment_id WHERE comments.id IN (";
+        for($i = 0; $i < count($_POST['checkBoxes']); $i++) {
+            $query = $query . '?';
+            if (($i + 1) !== count($_POST['checkBoxes'])) {
+                $query = $query . ', ';
+            }
+        }
+        $query = $query . ");";
+
+        $stmt = $this->connect->prepare($query);
+        $stmt->execute($_POST['checkBoxes']);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getImages(array $imagesFiles): array {
         $result = [];
 
         for ($i = 0; $i < count($imagesFiles['name']); $i++) {
@@ -117,7 +147,7 @@ class Comments {
         return $result;
     }
 
-    public function saveImages($commentIndex, array $images) {
+    public function saveImages(int $commentIndex, array $images): void {
         foreach ($images as $image) {
             move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
 
@@ -134,11 +164,11 @@ class Comments {
         }
     }
 
-    public function createMiniature(array $original) {
+    public function createMiniature(array $original): string {
         $path = __DIR__ . "/../images/";
 
         list($origWidth, $origHeight) = getimagesize("{$path}{$original['name']}");
-        list($newWidth, $newHeight) = [300, 300];
+        list($newWidth, $newHeight) = $this->getNewSizes($origWidth, $origHeight);
 
         $miniature = imagecreatetruecolor($newWidth, $newHeight);
         $originalImage = imagecreatefromjpeg("{$path}{$original['name']}");
@@ -155,7 +185,20 @@ class Comments {
         return $blob;
     }
 
-    public function checkSizeImages(array $images) {
+    public function getNewSizes(int $origWidth, int $origHeight): array {
+        $width = 300; 
+        $height = 300;
+
+        if ($origWidth >= $origHeight) {
+            $height = ($origHeight / $origWidth) * $width;
+        } else {
+            $width = ($origWidth / $origHeight) * $height;
+        }
+
+        return [$width, $height];
+    }
+
+    public function checkSizeImages(array $images): bool {
         foreach ($images as $image) {
             if ($image['size'] >= 1048576) {
                 return true;

@@ -138,7 +138,7 @@ class Comments {
         $path = __DIR__ . "/../images/";
 
         list($origWidth, $origHeight) = getimagesize("{$path}{$original['name']}");
-        list($newWidth, $newHeight) = [300, 300];
+        list($newWidth, $newHeight) = $this->getNewSizes($origWidth, $origHeight);
 
         $miniature = imagecreatetruecolor($newWidth, $newHeight);
         $originalImage = imagecreatefromjpeg("{$path}{$original['name']}");
@@ -153,6 +153,19 @@ class Comments {
         imagedestroy($originalImage);
 
         return $blob;
+    }
+
+    public function getNewSizes($origWidth, $origHeight) {
+        $width = 300; 
+        $height = 300;
+
+        if ($origWidth >= $origHeight) {
+            $height = ($origHeight / $origWidth) * $width;
+        } else {
+            $width = ($origWidth / $origHeight) * $height;
+        }
+
+        return [$width, $height];
     }
 
     public function checkSizeImages(array $images) {

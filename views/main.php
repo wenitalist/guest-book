@@ -10,6 +10,7 @@
             Комментарий:
             <textarea required id='inputComment' class='comment-input-text' maxlength='255' name='comment'></textarea>
         </label>
+        <p class='images-message'>Можно прикрепить 5 картинок c максимальным размером до 1 мб, в формате jpeg</p>
         <input type="file" id='inputImages' name="images[]" multiple accept="image/jpeg">
         <label style='display:none'> <!-- Защита от ботов -->
             Фамилия:

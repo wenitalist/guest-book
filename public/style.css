@@ -82,6 +82,12 @@ nav {
     cursor: pointer;
 }
 
+.images-message {
+    margin-top: 2px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
 .comment-button {
     width: 40%;
     font-size: 20px;

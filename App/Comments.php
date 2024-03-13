@@ -12,8 +12,9 @@ class Comments {
     }
 
     public function getComments(): array { // Получить все комментарии
-        $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
-                  FROM comments LEFT JOIN users ON comments.user_id = users.id ORDER BY date_time DESC";
+        $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users FROM comments 
+                LEFT JOIN users ON comments.user_id = users.id 
+                ORDER BY date_time DESC";
         $stmt = $this->connect->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -110,7 +111,9 @@ class Comments {
             $path = __DIR__ . "/../images/";
 
             foreach ($imagesNames as $image) {
-                unlink("{$path}{$image['name']}");
+                if (file_exists("{$path}{$image['name']}")) {
+                    unlink("{$path}{$image['name']}");
+                }
             }
         }
     }
@@ -148,7 +151,14 @@ class Comments {
     }
 
     public function saveImages(int $commentIndex, array $images): void {
+        $path = __DIR__ . "/../images/";
+
         foreach ($images as $image) {
+
+            if(file_exists("{$path}{$image['name']}")) {
+                $image['name'] = $this->renameFile($path, $image['name']);
+            }
+
             move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
 
             $saveOriginal = "INSERT INTO images (name, comment_id) VALUES (?, ?)";
@@ -162,6 +172,22 @@ class Comments {
             $stmt = $this->connect->prepare($saveMiniature);
             $stmt->execute([$imageIndex, $miniature]);
         }
+    }
+
+    public function renameFile(string $path, string $name): string {
+        $newName = $name;
+
+        if (strlen(str_replace('.jpg', '', $name)) < 5) {
+            while (file_exists("{$path}{$newName}")) {
+                $newName = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+            }
+        } else {
+            while (file_exists("{$path}{$newName}")) {
+                $newName = str_shuffle(str_replace('.jpg', '', $newName));
+            }
+        }
+
+        return $newName . '.jpg';
     }
 
     public function createMiniature(array $original): string {

@@ -12,12 +12,36 @@ class Comments {
     }
 
     public function getComments(): array { // Получить все комментарии
-        $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users FROM comments 
+        $query = "SELECT comments.id, 
+                        comments.content, 
+                        comments.date_time, 
+                        comments.name as name_in_comments, 
+                        users.name as name_in_users,
+                        GROUP_CONCAT(images.name) as images_names
+                FROM comments 
                 LEFT JOIN users ON comments.user_id = users.id 
+                LEFT JOIN images ON comments.id = images.comment_id
+                GROUP BY comments.id
                 ORDER BY date_time DESC";
         $stmt = $this->connect->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+
+        // dump($result);
+        // exit();
+        // foreach($result as $key => $row) {
+        //     if (!strpos($result[$key]['images_names'], '[null]') && !strpos($result[$key]['miniatures_blobs'], '[null]')) {
+        //         $result[$key]['images_names'] = json_decode($row['images_names']);
+        //         $result[$key]['miniatures_blobs'] = json_decode($row['miniatures_blobs']);
+        //     } else {
+        //         $result[$key]['images_names'] = null;
+        //         $result[$key]['miniatures_blobs'] = null;
+        //     }
+        // }
+
+        return $result;
     }
 
     public function newComment(): string { // Для сохранения нового комментария
@@ -114,6 +138,9 @@ class Comments {
                 if (file_exists("{$path}{$image['name']}")) {
                     unlink("{$path}{$image['name']}");
                 }
+                if (file_exists("{$path}/miniatures/{$image['name']}")) {
+                    unlink("{$path}/miniatures/{$image['name']}");
+                }
             }
         }
     }
@@ -155,42 +182,19 @@ class Comments {
 
         foreach ($images as $image) {
 
-            if(file_exists("{$path}{$image['name']}")) {
-                $image['name'] = $this->renameFile($path, $image['name']);
-            }
+            $image['name'] = md5(file_get_contents($image['tmp_name'])) . '.jpg';
 
-            move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
+            move_uploaded_file($image['tmp_name'], "{$path}{$image['name']}");
 
             $saveOriginal = "INSERT INTO images (name, comment_id) VALUES (?, ?)";
             $stmt = $this->connect->prepare($saveOriginal);
             $stmt->execute([$image['name'], $commentIndex]);
 
-            $imageIndex = $this->connect->lastInsertId();
-            $miniature = $this->createMiniature($image);
-
-            $saveMiniature = "INSERT INTO miniatures (image_id, miniature_blob) VALUES (?, ?)";
-            $stmt = $this->connect->prepare($saveMiniature);
-            $stmt->execute([$imageIndex, $miniature]);
+            $this->createMiniature($image);
         }
     }
 
-    public function renameFile(string $path, string $name): string {
-        $newName = $name;
-
-        if (strlen(str_replace('.jpg', '', $name)) < 5) {
-            while (file_exists("{$path}{$newName}")) {
-                $newName = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
-            }
-        } else {
-            while (file_exists("{$path}{$newName}")) {
-                $newName = str_shuffle(str_replace('.jpg', '', $newName));
-            }
-        }
-
-        return $newName . '.jpg';
-    }
-
-    public function createMiniature(array $original): string {
+    public function createMiniature(array $original): void {
         $path = __DIR__ . "/../images/";
 
         list($origWidth, $origHeight) = getimagesize("{$path}{$original['name']}");
@@ -201,19 +205,16 @@ class Comments {
 
         imagecopyresampled($miniature, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
 
-        ob_start();
-        imagejpeg($miniature, null, 75);
-        $blob = ob_get_clean();
+        $miniatureName = md5(file_get_contents("{$path}{$original['name']}"));
+        imagejpeg($miniature, "{$path}miniatures/{$miniatureName}.jpg", 75);
 
         imagedestroy($miniature);
         imagedestroy($originalImage);
-
-        return $blob;
     }
 
     public function getNewSizes(int $origWidth, int $origHeight): array {
-        $width = 300; 
-        $height = 300;
+        $width = 100; 
+        $height = 100;
 
         if ($origWidth >= $origHeight) {
             $height = ($origHeight / $origWidth) * $width;

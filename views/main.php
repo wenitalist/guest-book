@@ -43,20 +43,25 @@ if ($_SESSION['permission'] === 'admin') {
         $delCheckBox = "";
 
         foreach ($results as $row) {
-            if ($row['name_in_users'] == NULL) {
-                $name = $row['name_in_comments'];
-            } else {
-                $name = $row['name_in_users'];
-            }
             $name = $row['name_in_users'] ?: $row['name_in_comments'];
+            $tagsWithImages = "";
 
             if ($_SESSION['permission'] === 'admin') {
                 $delCheckBox = "<label class='check-boxes-text'><input type='checkbox' name='checkBoxes[]' class='check-boxes' value='{$row['id']}'>Удалить</label>";
+            }
+
+            if ($row['images_names'] !== null) {
+                $images = explode(',', $row['images_names']);
+
+                foreach ($images as $image) {
+                    $tagsWithImages = $tagsWithImages . "<img src='miniatures/{$image}' alt='miniature'>";
+                }
             }
         
             echo "<div class='comment-block'>
                 <div class='column-comment'>
                     <p class='content'>{$row['content']}</p>
+                    {$tagsWithImages}
                     <p class='name'>Имя: {$name}</p>
                 </div>
                 <div class='row-comment'>

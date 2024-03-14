@@ -12,10 +12,20 @@ class Comments {
     }
 
     public function getComments(): array { // Получить все комментарии
-        $query = "SELECT comments.id, comments.content, comments.date_time, comments.name as name_in_comments, users.name as name_in_users 
-                  FROM comments LEFT JOIN users ON comments.user_id = users.id ORDER BY date_time DESC";
+        $query = "SELECT comments.id, 
+                        comments.content, 
+                        comments.date_time, 
+                        comments.name as name_in_comments, 
+                        users.name as name_in_users,
+                        GROUP_CONCAT(images.name) as images_names
+                FROM comments 
+                LEFT JOIN users ON comments.user_id = users.id 
+                LEFT JOIN images ON comments.id = images.comment_id
+                GROUP BY comments.id
+                ORDER BY date_time DESC";
         $stmt = $this->connect->prepare($query);
         $stmt->execute();
+
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
@@ -110,7 +120,12 @@ class Comments {
             $path = __DIR__ . "/../images/";
 
             foreach ($imagesNames as $image) {
-                unlink("{$path}{$image['name']}");
+                if (file_exists("{$path}{$image['name']}")) {
+                    unlink("{$path}{$image['name']}");
+                }
+                if (file_exists("{$path}miniatures/{$image['name']}")) {
+                    unlink("{$path}miniatures/{$image['name']}");
+                }
             }
         }
     }
@@ -148,23 +163,23 @@ class Comments {
     }
 
     public function saveImages(int $commentIndex, array $images): void {
+        $path = __DIR__ . "/../images/";
+
         foreach ($images as $image) {
-            move_uploaded_file($image['tmp_name'],  __DIR__ . "/../images/{$image['name']}");
+
+            $image['name'] = md5(file_get_contents($image['tmp_name'])) . '.jpg';
+
+            move_uploaded_file($image['tmp_name'], "{$path}{$image['name']}");
 
             $saveOriginal = "INSERT INTO images (name, comment_id) VALUES (?, ?)";
             $stmt = $this->connect->prepare($saveOriginal);
             $stmt->execute([$image['name'], $commentIndex]);
 
-            $imageIndex = $this->connect->lastInsertId();
-            $miniature = $this->createMiniature($image);
-
-            $saveMiniature = "INSERT INTO miniatures (image_id, miniature_blob) VALUES (?, ?)";
-            $stmt = $this->connect->prepare($saveMiniature);
-            $stmt->execute([$imageIndex, $miniature]);
+            $this->createMiniature($image);
         }
     }
 
-    public function createMiniature(array $original): string {
+    public function createMiniature(array $original): void {
         $path = __DIR__ . "/../images/";
 
         list($origWidth, $origHeight) = getimagesize("{$path}{$original['name']}");
@@ -175,19 +190,16 @@ class Comments {
 
         imagecopyresampled($miniature, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
 
-        ob_start();
-        imagejpeg($miniature, null, 75);
-        $blob = ob_get_clean();
+        $miniatureName = md5(file_get_contents("{$path}{$original['name']}"));
+        imagejpeg($miniature, "{$path}miniatures/{$miniatureName}.jpg", 75);
 
         imagedestroy($miniature);
         imagedestroy($originalImage);
-
-        return $blob;
     }
 
     public function getNewSizes(int $origWidth, int $origHeight): array {
-        $width = 300; 
-        $height = 300;
+        $width = 100; 
+        $height = 100;
 
         if ($origWidth >= $origHeight) {
             $height = ($origHeight / $origWidth) * $width;

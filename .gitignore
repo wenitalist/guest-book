@@ -1,4 +1,7 @@
 vendor
 env.php
 /images/*
+/images/miniatures/*
 !/images/error-image.jpg
+!/images/miniatures
+!/images/miniatures/error-image.jpg

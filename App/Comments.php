@@ -26,22 +26,7 @@ class Comments {
         $stmt = $this->connect->prepare($query);
         $stmt->execute();
 
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-
-        // dump($result);
-        // exit();
-        // foreach($result as $key => $row) {
-        //     if (!strpos($result[$key]['images_names'], '[null]') && !strpos($result[$key]['miniatures_blobs'], '[null]')) {
-        //         $result[$key]['images_names'] = json_decode($row['images_names']);
-        //         $result[$key]['miniatures_blobs'] = json_decode($row['miniatures_blobs']);
-        //     } else {
-        //         $result[$key]['images_names'] = null;
-        //         $result[$key]['miniatures_blobs'] = null;
-        //     }
-        // }
-
-        return $result;
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function newComment(): string { // Для сохранения нового комментария
@@ -138,8 +123,8 @@ class Comments {
                 if (file_exists("{$path}{$image['name']}")) {
                     unlink("{$path}{$image['name']}");
                 }
-                if (file_exists("{$path}/miniatures/{$image['name']}")) {
-                    unlink("{$path}/miniatures/{$image['name']}");
+                if (file_exists("{$path}miniatures/{$image['name']}")) {
+                    unlink("{$path}miniatures/{$image['name']}");
                 }
             }
         }

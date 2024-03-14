@@ -54,14 +54,16 @@ if ($_SESSION['permission'] === 'admin') {
                 $images = explode(',', $row['images_names']);
 
                 foreach ($images as $image) {
-                    $tagsWithImages = $tagsWithImages . "<img src='miniatures/{$image}' alt='miniature'>";
+                    $tagsWithImages = $tagsWithImages . "<img id='{$row['id']}' class='miniatures' src='miniatures/{$image}' alt='miniature'>";
                 }
             }
         
             echo "<div class='comment-block'>
                 <div class='column-comment'>
                     <p class='content'>{$row['content']}</p>
-                    {$tagsWithImages}
+                    <div class='miniatures-block'>
+                        {$tagsWithImages}
+                    </div>
                     <p class='name'>Имя: {$name}</p>
                 </div>
                 <div class='row-comment'>

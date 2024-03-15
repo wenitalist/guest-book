@@ -5,8 +5,8 @@
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$JS_VERSION = 1;
-$CSS_VERSION = 1.2;
+$JS_VERSION = 1.1;
+$CSS_VERSION = 1.3;
 
 session_start();
 

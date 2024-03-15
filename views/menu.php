@@ -1,6 +1,6 @@
 <nav>
     <ul class="menu">
-        <a href="/"><img src="logo.png" alt="Логотип"></a>
+        <a href="/"><img src="logo.png" id='logo-image' alt="Логотип"></a>
         <?php 
             if ($_SESSION['login'] === 'no') {
                 echo "<li><a class='authorization-link' href='/authorization'>Вход</a></li>

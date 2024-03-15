@@ -8,10 +8,10 @@
         ?>
         <label>
             Комментарий:
-            <textarea required id='inputComment' class='comment-input-text' maxlength='255' name='comment'></textarea>
+            <textarea required id='inputComment' class='comment-input-text' rows='5' maxlength='1500' name='comment'></textarea>
         </label>
-        <p class='images-message'>Можно прикрепить 5 картинок c максимальным размером до 1 мб, в формате jpeg</p>
-        <input type="file" id='inputImages' name="images[]" multiple accept="image/jpeg">
+        <p class='images-message'>Можно прикрепить до 5 картинок c максимальным размером до 1 мб, в формате jpeg</p>
+        <input type="file" id='input-images' name="images[]" multiple accept="image/jpeg">
         <label style='display:none'> <!-- Защита от ботов -->
             Фамилия:
             <input type='text' name='secondName' tabindex='-1'>
@@ -54,7 +54,14 @@ if ($_SESSION['permission'] === 'admin') {
                 $images = explode(',', $row['images_names']);
 
                 foreach ($images as $image) {
-                    $tagsWithImages = $tagsWithImages . "<img id='{$row['id']}' class='miniatures' src='miniatures/{$image}' alt='miniature'>";
+                    $src = "";
+
+                    if (file_exists(__DIR__ . "/../images/miniatures/{$image}")) {
+                        $src = "miniatures/{$image}";
+                    } else {
+                        $src = "miniatures/error-image.jpg";
+                    }
+                    $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$image}' alt='miniature' onclick='openModalWindow(this.name)'>";
                 }
             }
         
@@ -73,5 +80,13 @@ if ($_SESSION['permission'] === 'admin') {
             </div>";
         }
         if ($_SESSION['permission'] === 'admin') { echo "</form>"; }
+
+        echo "<div class='modal-window' id='modal-window' onclick='closeModalWindow()'>
+            <div class='modal-content'>
+                <div class='div-for-image' onclick='imageClick(event)'>
+                    <img class='modal-image' id='modal-image' src='' alt='image' onclick='imageClick(event)'>
+                </div>
+            </div>
+        </div>";
         ?>
 </div>

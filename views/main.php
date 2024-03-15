@@ -64,10 +64,12 @@ if ($_SESSION['permission'] === 'admin') {
                     $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$image}' alt='miniature' onclick='openModalWindow(this.name)'>";
                 }
             }
+
+            $content = nl2br($row['content']);
         
             echo "<div class='comment-block'>
                 <div class='column-comment'>
-                    <p class='content'>{$row['content']}</p>
+                    <p class='content'>{$content}</p>
                     <div class='miniatures-block'>
                         {$tagsWithImages}
                     </div>

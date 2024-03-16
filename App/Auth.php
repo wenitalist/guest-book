@@ -14,7 +14,7 @@ class Auth {
 
     public function newUser () { // Для регистрации
         if (!$_POST['secondName']) {
-            $name = $_POST["name"];
+            $name = trim($_POST["name"]);
             $mail = $_POST["mail"];
             $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 

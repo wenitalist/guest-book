@@ -8,7 +8,7 @@
         ?>
         <label>
             Комментарий:
-            <textarea required id='inputComment' class='comment-input-text' rows='5' maxlength='1500' name='comment'></textarea>
+            <textarea required id='inputComment' class='comment-input-text' maxlength='1500' name='comment' oninput='autoGrow(this)'></textarea>
         </label>
         <p class='images-message'>Можно прикрепить до 5 картинок c максимальным размером до 1 мб, в формате jpeg</p>
         <input type="file" id='input-images' name="images[]" multiple accept="image/jpeg">
@@ -55,13 +55,16 @@ if ($_SESSION['permission'] === 'admin') {
 
                 foreach ($images as $image) {
                     $src = "";
+                    $nameImage = "";
 
                     if (file_exists(__DIR__ . "/../images/miniatures/{$image}")) {
                         $src = "miniatures/{$image}";
+                        $nameImage = $image;
                     } else {
                         $src = "miniatures/error-image.jpg";
+                        $nameImage = "error-image.jpg";
                     }
-                    $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$image}' alt='miniature' onclick='openModalWindow(this.name)'>";
+                    $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$nameImage}' alt='miniature' onclick='openModalWindow(this.name)'>";
                 }
             }
 

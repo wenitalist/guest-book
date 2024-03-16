@@ -17,6 +17,11 @@ function imageClick(event) { // Для того чтобы при нажатии
     event.stopPropagation();
 }
 
+function autoGrow(element) { // Автоматическое увеличение высоты textarea
+    element.style.height = "127px"; // Минимальная высота текстового поля
+    element.style.height = (element.scrollHeight) + "px"; // Получает высоту содержимого в текстовом поле и задаёт высоту для самого текстового поля
+}
+
 document.addEventListener('DOMContentLoaded', function() { 
 
     var errorColor = 'rgb(222, 1, 1);';

@@ -136,6 +136,9 @@ nav {
     resize: none;
     overflow: hidden;
     overflow-wrap: break-word;
+    min-height: 127px;
+    max-height: 635px;
+    padding: 3px 5px 3px 5px;
 }
 
 #error-message {

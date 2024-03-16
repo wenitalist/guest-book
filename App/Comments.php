@@ -46,7 +46,7 @@ class Comments {
                 }
 
                 $name = isset($_POST['name']) ? $_POST['name'] : null;
-                $content = htmlspecialchars($_POST['comment']);
+                $content = htmlspecialchars(trim($_POST['comment']));
     
                 $query = "INSERT INTO comments (content, date_time, user_id, name) VALUES (?, ?, ?, ?)";
                 $stmt = $this->connect->prepare($query);

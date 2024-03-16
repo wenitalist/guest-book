@@ -55,13 +55,16 @@ if ($_SESSION['permission'] === 'admin') {
 
                 foreach ($images as $image) {
                     $src = "";
+                    $nameImage = "";
 
                     if (file_exists(__DIR__ . "/../images/miniatures/{$image}")) {
                         $src = "miniatures/{$image}";
+                        $nameImage = $image;
                     } else {
                         $src = "miniatures/error-image.jpg";
+                        $nameImage = "error-image.jpg";
                     }
-                    $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$image}' alt='miniature' onclick='openModalWindow(this.name)'>";
+                    $tagsWithImages .= "<img id='{$row['id']}' class='miniatures' src={$src} name='{$nameImage}' alt='miniature' onclick='openModalWindow(this.name)'>";
                 }
             }
 

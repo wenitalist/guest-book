@@ -18,47 +18,43 @@ class Url {
         $url = explode('?', $request);
         $url = $url[0];
 
-        if ($url === self::MASS_URL[0]) { // Главная страница
-            return "../views/main.php";
-        }
-        elseif ($url === self::MASS_URL[1]) { // Страница авторизации
-            return "../views/authorization.php";
-        }
-        elseif ($url === self::MASS_URL[2]) { // Страница регистрации
-            return "../views/registration.php";
-        }
-        elseif ($url === self::MASS_URL[3]) { // Авторизация
-            $auth = new Auth();
-            echo $auth->getUser();
-            exit();
-        }
-        elseif ($url === self::MASS_URL[4]) { // Регистрация
-            $auth = new Auth();
-            echo $auth->newUser();
-            exit();
-        }
-        elseif ($url === self::MASS_URL[5]) { // Новый комментарий
-            $comments = new Comments();
-            echo $comments->newComment();
-            exit();
-        }
-        elseif ($url === self::MASS_URL[6]) { // Удаление комментариев
-            $comments = new Comments();
-            echo $comments->deleteComments();
-            exit();
-        }
-        elseif ($url === self::MASS_URL[7]) { // Выход с аккаунта
-            $auth = new Auth();
-            $auth->logout();
-            exit();
-        }
-        else { // Страница не найдена
-            return "../views/error404.php";
+        switch ($url) {
+            case self::MASS_URL[0]:
+                return "../views/main.php";
+            case self::MASS_URL[1]:
+                return "../views/authorization.php";
+            case self::MASS_URL[2]:
+                return "../views/registration.php";
+            case self::MASS_URL[3]:
+                $auth = new Auth();
+                echo $auth->getUser();
+                exit();
+            case self::MASS_URL[4]:
+                $auth = new Auth();
+                echo $auth->newUser();
+                exit();
+            case self::MASS_URL[5]:
+                $comments = new Comments();
+                echo $comments->newComment();
+                exit();
+            case self::MASS_URL[6]:
+                $comments = new Comments();
+                echo $comments->deleteComments();
+                exit();
+            case self::MASS_URL[7]:
+                $auth = new Auth();
+                $auth->logout();
+                exit();
+            default:
+                return "../views/error404.php";
         }
     }
 
-    public function setTitle(string $request) {
-        switch ($request) {
+    public function setTitle(string $url) {
+        $url = explode('?', $url);
+        $url = $url[0];
+
+        switch ($url) {
             case self::MASS_URL[0]:
                 return '<title>Главная страница</title>';
             case self::MASS_URL[1]:

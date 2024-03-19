@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name your_domain www.your_domain;
+    root path_to_public_directory;
+
+    client_max_body_size 6M;
+
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.js$ {
+        alias path_to_js_directory;
+        try_files $uri =404;
+    }
+
+    location ~ \.jpg$ {
+        root path_to_images_directory;
+        try_files $uri =404;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:path_to_php_fpm_socket;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+}

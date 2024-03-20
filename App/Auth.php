@@ -96,7 +96,6 @@ class Auth {
     public function logout() { // Выход с аккаунта
         if ($_SESSION['login'] === 'yes') {
             session_unset();
-            session_destroy();
     
             header('Location: /');
             exit();

@@ -80,7 +80,7 @@ class Comments {
 
     public function deleteComments(): string { // Удаление комментариев 
         if ($_SESSION['permission'] === 'admin') {
-            if ($_POST['checkBoxes']) {
+            if (isset($_POST['checkBoxes'])) {
             
                 $imagesNames = $this->getImagesNames();
 
@@ -202,9 +202,9 @@ class Comments {
         $height = 100;
 
         if ($origWidth >= $origHeight) {
-            $height = ($origHeight / $origWidth) * $width;
+            $height = (int)(($origHeight / $origWidth) * $width);
         } else {
-            $width = ($origWidth / $origHeight) * $height;
+            $width = (int)(($origWidth / $origHeight) * $height);
         }
 
         return [$width, $height];
